@@ -1,0 +1,26 @@
+package com.study.springmvc;
+
+import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+
+public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
+
+	@Override
+	protected Class<?>[] getRootConfigClasses() {
+		return null;
+	}
+
+	@Override
+	protected Class<?>[] getServletConfigClasses() {
+		
+		return  new Class<?>[] {WebConfig.class}; //配置檔
+	}
+
+	@Override
+	protected String[] getServletMappings() {
+		return new String[] {"/mvc/*"}; 
+		//哪個檔案後被springMVC管理
+		//                      webconfig 設定
+		//http://localhost:8080/springmvc/mvc/*
+	}
+
+}
