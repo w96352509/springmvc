@@ -1,10 +1,15 @@
 package com.study.springmvc.case02.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
 
@@ -18,10 +23,12 @@ public class LottoService {
 	 return lottos;
    }
    
-   //新增數字
+  //新增數字 0為最新
    public void addLotto() {
-	   lottos.add(generateLotto());
+	   lottos.add(0,generateLotto());
    }
+   
+   
    
    //更新數字
    public void updateLotto(int index) {
@@ -33,6 +40,8 @@ public class LottoService {
 	   lottos.remove(index);
    }
    
+   
+   
    //取號碼
    private Set<Integer> generateLotto(){
 	   Random r = new Random();
@@ -43,4 +52,6 @@ public class LottoService {
 	   }
 	   return lotto;
    }
+   
+   
 }
