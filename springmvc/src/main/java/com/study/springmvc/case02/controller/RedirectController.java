@@ -25,7 +25,7 @@ public class RedirectController {
 	@RequestMapping("/demo2")
 	public String demo2() {
 		//return "redirect:/mvc/case02/time/now";
-		return "redirect../time/now"; //相對路徑
+		return "redirect:../time/now"; //相對路徑
 	}
 	
 	@RequestMapping("/demo3")
