@@ -54,9 +54,6 @@
 		</mvc:message-converters>
 	</mvc:annotation-driven>
 	
-	<!-- load db.properties -->
-	<context:property-placeholder location="db.properties" />
-	
 	<!-- c3p0 pool -->
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
 		<property name="driverClass" value="com.mysql.cj.jdbc.Driver" />
