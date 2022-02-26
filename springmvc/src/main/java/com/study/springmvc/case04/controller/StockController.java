@@ -9,8 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -20,29 +21,35 @@ import com.study.springmvc.case04.validator.StockValidator;
 @Controller
 @RequestMapping("/case04/stock")
 public class StockController {
-	
+  
+	//存放紀錄
 	private List<Stock> stocks = new CopyOnWriteArrayList<>();
 	
 	@Autowired
 	private StockValidator stockValidator;
 	
-	@GetMapping("/")
-	public String index(@ModelAttribute Stock stock, Model model) {
-		model.addAttribute("stocks", stocks);
+	@RequestMapping("/")
+	public String index(@ModelAttribute Stock stock , Model model) {
+		model.addAttribute("_method", "POST");
+		model.addAttribute("stocks" , stocks);
 		return "case04/stock";
 	}
 	
 	@PostMapping("/")
-	public String add(@Valid Stock stock, BindingResult result, Model model) {
-		// 自主驗證錯誤
-		//                     驗證物件 錯誤結果
+	public String add(@Valid Stock stock , BindingResult result , Model model) {
+		//自主驗證
 		stockValidator.validate(stock, result);
-		if(result.hasErrors()) {
-			model.addAttribute("stocks", stocks);
+		if (result.hasErrors()) {
+			model.addAttribute("stocks" , stocks);
 			return "case04/stock";
 		}
-		stocks.add(stock);
+		  stocks.add(stock);
 		return "redirect:./";
 	}
 	
+	@DeleteMapping("/{index}")
+	public String delete(@PathVariable("index") int index ) {
+		stocks.remove(index);
+		return "redirect:./";
+	}
 }

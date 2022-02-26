@@ -9,6 +9,13 @@
 <!DOCTYPE html>
 <html>
 <head>
+<script type="text/javascript">
+  function deleteStock(index) {
+	  document.getElementById('_method').value = 'DELETE';
+	  document.getElementById('stock').action = '${pageContext.request.contextPath}/mvc/case04/stock/' + index;
+	  document.getElementById('stock').submit();
+}
+</script>
 <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.6/build/pure-min.css">
 <meta charset="UTF-8">
 <title>Stock Form</title>
@@ -23,39 +30,64 @@
 </head>
 <body style="padding: 15px">
 	
-	<spform:form class="pure-form" 
-				method="post" 
-				modelAttribute="stock"
-				action="${ pageContext.request.contextPath }/mvc/case04/stock/">
+	 <spform:form class="pure-form" 
+	              modelAttribute="stock"
+	              method="post"
+	              action="${pageContext.request.contextPath}/mvc/case04/stock/">
 		<fieldset>
-			<legend>Stock Form</legend>
-			代號：<spform:input path="symbol"/>
-	    		 <spform:errors path="symbol" cssClass="error" /><p />
-	    	價格：<spform:input path="price"/>
-	    		 <spform:errors path="price" cssClass="error" /><p />
-	    	數量：<spform:input path="amount" />
-	    		 <spform:errors path="amount" cssClass="error" /><p />
-	        <button type="submit" class="pure-button pure-button-primary">新增</button>
-	        <p />
-	        <spform:errors path="*" cssClass="error" />
+			<legend>Stock From</legend>
+			<input type="hidden" id="_method" name="_method" value="${ _method }">
+			 代號:
+			 <spform:input  path="symbol"/>
+			 <spform:errors path="symbol" cssClass="error" />
+			 <p />
+			 價格:
+			 <spform:input  path="price"/>
+			 <spform:errors path="price" cssClass="error" />
+			 <p />
+			 數量:
+			 <spform:input  path="amount"/>
+			 <spform:errors path="amount" cssClass="error" />
+			 <p />
+			 <button type="submit" class="pure-button pure-button-primary">新增</button>
+			 
+			 <p />
+			 <spform:errors path="*" cssClass="info" />
 	    </fieldset>
     </spform:form>
     <table class="pure-table pure-table-bordered">
     	<thead>
-    		<tr>
-    			<th>index</th>
-    			<th>stock</th>
-    		</tr>
+    	  <tr>
+    	    <th>index</th>
+    	    <th>代號</th>
+    	    <th>價格</th>
+    	    <th>數量</th>
+    	  </tr>
     	</thead>
     	<tbody>
-    		<c:forEach varStatus="status" var="stock" items="${ stocks }">
-    		<tr>
-    			<td>${ status.index }</td>
-    			<td>${ stock }</td>
-    		</tr>
-    		</c:forEach>
+    	  <c:forEach varStatus="status" items="${stocks}" var="stock">
+    	  <tr>
+    	    <td>
+    	      <a>${ status.index }</a>
+    	    </td>
+    	    <td>${stock.symbol}</td>
+    	    <td>${stock.price}</td>
+    	    <td>
+    	       <fmt:formatNumber 
+    	        type="number" 
+    	        value="${stock.amount / 1000}"
+    	        />張
+    	    </td>
+    	    <td>
+    	    <button 
+    	    type="button" 
+    	    class="pure-button pure-button-primary" 
+    	    onclick="deleteStock(${ status.index })">刪除
+    	    </button>
+    	    </td>
+    	  </tr>
+    	  </c:forEach>
     	</tbody>
     </table>
-    
 </body>
 </html>
