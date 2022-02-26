@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.study.springmvc.lab.entity.FundStock;
 
-public interface FundDaostock {
+public interface FundstockDao {
     //每頁五筆
 	int LIMIT = 5 ;
 	//全部查詢
