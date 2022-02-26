@@ -38,5 +38,9 @@ insert into fundstock(fid , symbol , share ) values(5 , "2317.TW" , 100000);
 insert into fundstock(fid , symbol , share ) values(5 , "2886.TW" , 200000);
 insert into fundstock(fid , symbol , share ) values(5 , "2002.TW" , 300000);
 
+insert into fundstock(symbol) values("2480.TW");
+insert into fundstock(symbol) values("1201.TW");
+insert into fundstock(symbol) values("1216.TW");
+
 
 
