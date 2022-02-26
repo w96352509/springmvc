@@ -13,7 +13,7 @@ public class Fund {
 	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8") // 返回時間類型
 	@DateTimeFormat(pattern="yyyy-MM-dd ") //接收時間類型
     private Date createtime;
-	private List<FundStock> fundstocks; //單方
+	private List<Fundstock> fundstocks; //單方
 
 	public Integer getFid() {
 		return fid;
@@ -39,11 +39,11 @@ public class Fund {
 		this.createtime = createtime;
 	}
 
-	public List<FundStock> getFundstocks() {
+	public List<Fundstock> getFundstocks() {
 		return fundstocks;
 	}
 
-	public void setFundstocks(List<FundStock> fundstocks) {
+	public void setFundstocks(List<Fundstock> fundstocks) {
 		this.fundstocks = fundstocks;
 	}
 

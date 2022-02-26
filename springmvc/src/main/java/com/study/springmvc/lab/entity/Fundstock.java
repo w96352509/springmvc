@@ -1,6 +1,6 @@
 package com.study.springmvc.lab.entity;
 
-public class FundStock {
+public class Fundstock {
 	private Integer sid;
 	private Integer fid;
 	private String symbol;
