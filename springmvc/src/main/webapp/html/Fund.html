@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet"
+	href="https://unpkg.com/purecss@2.0.6/build/pure-min.css">
+<meta charset="UTF-8">
+<title>Fund Form（Ajax）</title>
+<style type="text/css">
+.error {
+	color: #FF0000
+}
+.mylink {
+	color: blue;
+	text-decoration: underline;
+	cursor: pointer;
+}
+</style>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/util.js"></script>
+
+<script type="text/javascript">
+	// 頁面載入完成後要執行的程序
+	$(document).ready(function() {
+		// Fund List 的資料列表
+		table_list();
+		// 註冊相關事件
+		$('#add').on('click', function() {
+			addOrUpdate('POST');
+		});
+		$('#myTable').on('click', 'tr', function() {
+			getItem(this);
+		});
+		$('#upt').on('click', function() {
+			addOrUpdate('PUT');
+		});
+		$('#rst').on('click', function() {
+			btnAttr(0);
+		});
+	});
+	
+	function getItem(elem) {
+		var fid = $(elem).find('td').eq(0).text().trim();
+		console.log(fid);
+		var path = '../mvc/lab/fund/' + fid;
+		var func = function(fund, status) {
+			console.log(fund);
+			// 將資料配置到 myForm 表單中
+			$('#myForm').find('#fid').val(fund.fid);
+			$('#myForm').find('#fname').val(fund.fname);
+			// 修改 btn 狀態
+			btnAttr(1);
+			
+		};
+		$.get(path, func);
+	}
+	
+	function addOrUpdate(method) {
+		// 將表單欄位資料json物件序列化
+		var jsonObject = $('#myForm').serializeObject();
+		// 將json物件轉為json字串
+		var jsonString = JSON.stringify(jsonObject);
+		console.log(jsonString);
+		// 將資料傳遞到後端
+		$.ajax({
+			url: "../mvc/lab/fund/",
+			type: method,
+			contentType: 'application/json;charset=utf-8',
+			data: jsonString,
+			success: function(respData) {
+				console.log(respData);
+				// 列表資料更新
+				table_list();
+				// rst 狀態
+				btnAttr(0);
+			}
+		});
+	}
+	
+	// Fund List 的資料列表
+	function table_list() {
+		// 取得所有 fund 資料
+		$.get("../mvc/lab/fund/", function(datas, status) {
+			console.log(datas);
+			console.log(status);
+			// 清除目前 myTable 上的舊有資料
+			$('#myTable tbody > tr').remove();
+			// 將資料 datas 依序放入 myTable 中
+			$.each(datas, function(i, item){
+				var html = '<tr><td>{0}</td><td>{1}</td><td>{2}</td></tr>';
+				$('#myTable').append(String.format(html, item.fid, item.fname, item.createtime));
+			});
+		});
+	}
+	
+	function btnAttr(status) {
+		$('#myForm').find('#add').attr('disabled', status != 0);
+		$('#myForm').find('#upt').attr('disabled', status == 0);
+		$('#myForm').find('#del').attr('disabled', status == 0);
+	}
+</script>
+
+</head>
+<body style="padding: 15px">
+	<table>
+		<tr>
+			<!-- Fund Form -->
+			<td valign="top">
+				<form id="myForm" class="pure-form">
+					<fieldset>
+						<legend>
+							<a href="../mvc/lab/fundstock/">Fundstock Form</a> | Fund
+							Form（Ajax）
+						</legend>
+						基金序號： 
+						<input type="text" id="fid" name="fid" readonly />
+						<p />
+						基金名稱： <input type="text" id="fname" name="fname" required />
+						<p />
+						<button type="button" id="add"
+							class="pure-button pure-button-primary">新增</button>
+						<button type="button" id="upt"
+							class="pure-button pure-button-primary" disabled>修改</button>
+						<button type="button" id="del"
+							class="pure-button pure-button-primary" disabled>刪除</button>
+						<button type="button" id="rst"
+							class="pure-button pure-button-primary">重置</button>
+						<p />
+					</fieldset>
+				</form>
+			</td>
+			<!-- Fundstock List -->
+			<td valign="top">
+				<form class="pure-form">
+					<fieldset>
+						<legend> Fund List </legend>
+						<table id="myTable" class="pure-table pure-table-bordered">
+							<thead>
+								<tr>
+									<th>基金序號</th>
+									<th>基金名稱</th>
+									<th>建立日期</th>
+								</tr>
+							</thead>
+							<tbody>
+								
+							</tbody>
+						</table>
+					</fieldset>
+				</form>
+			</td>
+		</tr>
+	</table>
+
+</body>
+</html>
