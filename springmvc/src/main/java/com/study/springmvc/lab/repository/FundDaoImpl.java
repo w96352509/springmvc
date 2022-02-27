@@ -71,32 +71,57 @@ public class FundDaoImpl implements FundDao {
 
 	@Override
 	public List<Fund> queryPage(int offset) {
-		// TODO Auto-generated method stub
-		return null;
+		if(offset < 0) {
+			return queryAll();
+		}
+		String sql = "select f.fid , f.fname , f.createtime , "
+				+ "s.sid as fundstocks_sid , s.fid as fundstocks_fid , s.symbol as fundstocks_symbol , s.share as fundstocks_share  "
+				+ "from fund f left join fundstock s "
+				+ "on f.fid = s.fid order by f.fid ";
+		sql += String.format(" limit %d offset %d ", FundstockDao.LIMIT, offset);
+		ResultSetExtractor<List<Fund>> resultSetExtractor = 
+				JdbcTemplateMapperFactory.newInstance()
+				.addKeys("fid") // Fund 的主鍵
+				.newResultSetExtractor(Fund.class);
+		
+		return jdbcTemplate.query(sql, resultSetExtractor);
 	}
 
 	@Override
 	public Fund get(Integer fid) {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "select f.fid, f.fname, f.createtime from fund f where f.fid=?";
+		Fund fund = jdbcTemplate.queryForObject(sql, new Object[] {fid}, new BeanPropertyRowMapper<Fund>(Fund.class));
+		sql = "select s.sid, s.fid, s.symbol, s.share from fundstock s where s.fid = ?";
+		List<Fundstock> fundstocks = jdbcTemplate.query(
+				sql, 
+				new Object[] {fund.getFid()}, 
+				new BeanPropertyRowMapper<Fundstock>(Fundstock.class));
+		fund.setFundstocks(fundstocks);
+		return fund;
+	}
+	
+	@Override
+	public int count() {
+		String sql = "select count(*) from fund";
+		return jdbcTemplate.queryForObject(sql, Integer.class);
 	}
 
 	@Override
 	public int add(Fund fund) {
-		// TODO Auto-generated method stub
-		return 0;
+		String sql = "insert into fund(fname) values (?)";
+		return jdbcTemplate.update(sql, fund.getFname());
 	}
 
 	@Override
 	public int update(Fund fund) {
-		// TODO Auto-generated method stub
-		return 0;
+		String sql = "update fund set fname=? where fid=?";
+		return jdbcTemplate.update(sql, fund.getFname(), fund.getFid());
 	}
 
 	@Override
 	public int delete(Integer fid) {
-		// TODO Auto-generated method stub
-		return 0;
+		String sql = "delete from fund where fid=?";
+		return jdbcTemplate.update(sql, fid);
 	}
 
 }

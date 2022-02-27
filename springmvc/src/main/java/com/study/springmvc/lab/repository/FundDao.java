@@ -16,7 +16,10 @@ public interface FundDao {
 
 	// 取得單筆
 	Fund get(Integer fid);
-
+	
+	// 查詢所有筆數
+	int count();
+		
 	// 新增
 	int add(Fund fund);
 
