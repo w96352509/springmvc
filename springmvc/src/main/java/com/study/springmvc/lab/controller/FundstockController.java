@@ -88,7 +88,7 @@ public class FundstockController {
 	}
 	
 	@PutMapping("/{sid}")
-	public String update(@PathVariable("sid") Integer sid,Fundstock fundstock) {
+	public String update(Fundstock fundstock) {
 		fundstockDao.update(fundstock);
 		return "redirect:./";
 	}

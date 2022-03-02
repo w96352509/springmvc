@@ -75,7 +75,7 @@ public class FundstockDaoImpl implements FundstockDao {
 		String sql = "select s.sid, s.fid, s.symbol, s.share , "
 				+ "f.fid as fund_fid , f.fname as fund_fname , f.createtime as fund_createtime  "
 				+ "from fundstock s left join fund f " + "on f.fid = s.fid order by s.sid ";
-		//加上數量限制(limit) interface設定大小 / offset(從哪開始)
+		//加上數量限制(limit) interface設定大小 / offset(從哪+1開始)
 		sql += String.format(" limit %d offset %d ", FundstockDao.LIMIT, offset);
 		//
 		ResultSetExtractor<List<Fundstock>> resultSetExtractor = 

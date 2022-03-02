@@ -74,17 +74,27 @@ public class FundDaoImpl implements FundDao {
 		if(offset < 0) {
 			return queryAll();
 		}
-		String sql = "select f.fid , f.fname , f.createtime , "
-				+ "s.sid as fundstocks_sid , s.fid as fundstocks_fid , s.symbol as fundstocks_symbol , s.share as fundstocks_share  "
-				+ "from fund f left join fundstock s "
-				+ "on f.fid = s.fid order by f.fid ";
-		sql += String.format(" limit %d offset %d ", FundstockDao.LIMIT, offset);
-		ResultSetExtractor<List<Fund>> resultSetExtractor = 
-				JdbcTemplateMapperFactory.newInstance()
-				.addKeys("fid") // Fund 的主鍵
-				.newResultSetExtractor(Fund.class);
-		
-		return jdbcTemplate.query(sql, resultSetExtractor);
+		String sql = "select f.fid, f.fname, f.createtime from fund f order by f.fid ";
+		sql += String.format(" limit %d offset %d ", FundDao.LIMIT, offset);
+		RowMapper<Fund> rm = (ResultSet rs, int rowNum) -> {
+			Fund fund = new Fund();
+			fund.setFid(rs.getInt("fid"));
+			fund.setFname(rs.getString("fname"));
+			fund.setCreatetime(rs.getDate("createtime"));
+			// 根據 fid 查詢 fundstock 列表
+			String sql2 = "select s.sid, s.fid, s.symbol, s.share "
+					+ "from fundstock s "
+					+ "where s.fid = ? "
+					+ "order by s.sid";
+			Object[] args = {fund.getFid()};
+			List<Fundstock> fundstocks = jdbcTemplate.query(
+					sql2, 
+					args, 
+					new BeanPropertyRowMapper<Fundstock>(Fundstock.class));
+			fund.setFundstocks(fundstocks);
+			return fund;
+		};
+		return jdbcTemplate.query(sql, rm);
 	}
 
 	@Override
