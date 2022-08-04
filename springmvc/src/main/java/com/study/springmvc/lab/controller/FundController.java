@@ -46,7 +46,8 @@ public class FundController {
 		return fundDao.queryPage(offset);
 	}
 	
-	@PostMapping("/")
+	@PostMapping(path = "/" )
+	
 	public int add(@RequestBody Fund fund) {
 		return fundDao.add(fund);
 	}

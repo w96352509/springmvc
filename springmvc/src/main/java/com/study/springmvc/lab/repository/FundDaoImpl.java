@@ -104,7 +104,7 @@ public class FundDaoImpl implements FundDao {
 		sql = "select s.sid, s.fid, s.symbol, s.share from fundstock s where s.fid = ?";
 		List<Fundstock> fundstocks = jdbcTemplate.query(
 				sql, 
-				new Object[] {fund.getFid()}, 
+				new Object[] {fund.getFid()},  // = fund.getFid()
 				new BeanPropertyRowMapper<Fundstock>(Fundstock.class));
 		fund.setFundstocks(fundstocks);
 		return fund;

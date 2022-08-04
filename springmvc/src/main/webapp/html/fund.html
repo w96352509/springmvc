@@ -44,14 +44,11 @@
 			<td valign="top">
 				<form class="pure-form">
 					<fieldset>
-						<legend> Fund List&nbsp;|&nbsp;
+						<legend>Fund List&nbsp;|&nbsp;
 							<span class="mylink" onclick="queryPage(0);">全部</span>
 							&nbsp;|&nbsp;
-							<!-- Homework 動態分頁處理 -->
-							<span class="mylink" onclick="queryPage(1);">1</span>&nbsp;
-							<span class="mylink" onclick="queryPage(2);">2</span>
-							<span class="mylink" onclick="queryPage(3);">3</span>
-						</legpend>
+							<span id="myPageSpan"></span>
+						</legend>
 						<table id="myTable" class="pure-table pure-table-bordered">
 							<thead>
 								<tr>
